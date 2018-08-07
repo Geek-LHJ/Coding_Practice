@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+/* 整个CommentApp的样式 */
+.wrapper{
+  width: 500px;
+  margin: 10px auto;
+  font-size: 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+/* CommentInput 的样式 */
+.comment-input{
+  width: 500px;
+  height: 250px;
+  position: relative;
+}
+.comment-field{
+  margin-bottom:20px; 
+}
+.comment-field-name{
+  color: #666;
+}
+.comment-field-input input {
+  width: 360px;
+  height: 30px;
+  float: right;
+  margin-top: -25px; 
+  border: 1px solid #ccc;
+}
+.comment-field-input textarea{
+  width: 360px;
+  min-height: 140px;
+  float: right;
+  margin-top: -20px;
+  border: 1px solid #ccc;
+}
+.comment-field-button button{
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 80px;
+  height: 30px;
+  text-align: center;
+  background-color: #00a3cf;
+  border: #00a3cf;
+  color: #fff;
+  border-radius: 5px;
+}
+.comment-field-button button:hover{
+  cursor: pointer;
+}
+
+/* commentList的单个comment样式 */
+.comment{
+  height: 70px;
+  border-bottom:1px solid #ccc; 
+}
+.comment-user{
+  color: #00a3cf;
+  height: 20px;
+  line-height: 20px;
+  float: left;
+}
+.comment p{
+  height: 20px;
+  line-height: 20px;
+  text-indent: 1em;
+}
