@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+
+    <script type="text/babel">
+      //子组件LightCounter，用于显示字符串；改进为在里面设计一个自增的变量，并显示出来
+      /*var LightCounter= React.createClass({*/
+      //React在ES6的实现中去掉了getInitialState这个hook函数，规定state在constructor中实现
+      class LightCounter extends React.Component{
+        
+        constructor(props){
+          super(props);
+          this.state={ strikes: 0 };
+          this.timertick = this.timertick.bind(this);
+        }
+
+        timertick(){
+          //setState用于修改组件本身的state对象,传入的为JSON数据，覆盖之前的state对象值
+          this.setState({
+            strikes: this.state.strikes +100
+          });
+        }
+        //初识化数据时调用的借口方法,ES6 已经废弃该方法
+        /*getInitialState:function(){
+          return{
+            strikes: 0
+          };
+        },*/
+
+        //组件在被浏览器加载后，但是render函数还没有被调用前
+        componentDidMount(){        
+        //通过setInterval方法产生定时器，进行变量变化
+          setInterval(this.timertick, 1000);
+        }
+      
+        //渲染真实的DOM节点
+        render(){ 
+          var counterStyle= { color: "#66ffff", fontSize: 50 };
+          var count= this.state.strikes.toLocaleString();
+          return(
+            <h1 style={counterStyle}>{count}</h1>
+          );
+        }
+      }
+
+      //父组件LightCounterDisplay，用于绘制黑色的块
+      var LightCounterDisplay= React.createClass({
+        render: function(){
+          var divStyle= { width: 250, backgroundColor: "black", textAlign: "center",padding: 40,color: "#999",borderRadius: 10};
+          var comonStyle= { margin: 0, padding: 0 };
+          //...操作符的使用，来融合不同的样式
+          var textStyle= {
+            emphasis:{ fontSize:38, ...comonStyle },
+            smallEmphasis:{ ...comonStyle },
+            small:{fontSize:17, opacity: 0.6, ...comonStyle }
+          };
+          return(
+            <div style={divStyle}>
+              <LightCounter />
+              <h2 style= {textStyle}> xxx</h2>
+              <p style= {textStyle.emphasis}> 其他内容</p>
+              <p style= {textStyle.smallEmphasis}> (自从添加组件开始)</p>
+
+            </div>
+          );
+        }
+      });
+
+      //组件渲染
+      ReactDOM.render(
+        <LightCounterDisplay />,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+      const listData = [{
+        key:"001",
+        idd:"001",
+        title:"webstorm连接github，方便的管理仓库",
+        time:"2016-12-01",
+        tag:" git ",
+        contents:"66666666666666！"
+      }] //等等等多条数据
+      //父组件listBox
+      class ListBox extends React.Component {
+        constructor(props){
+          super(props);
+          this.pageNext=this.pageNext.bind(this);
+          this.setPage=this.setPage.bind(this);
+          this.state = {
+              indexList:[],//当前渲染的页面数据
+              totalData:listData,
+              current: 1, //当前页码
+              pageSize:4, //每页显示的条数
+              goValue:0,  //要去的条数index
+              totalPage:0,//总页数
+          };
+        }    
+        componentWillMount(){
+          //设置总页数
+          this.setState({
+              totalPage:Math.ceil( this.state.totalData.length/this.state.pageSize),
+          })
+          this.pageNext(this.state.goValue)
+        }  
+        //设置内容
+        setPage(num){
+            this.setState({
+                indexList:this.state.totalData.slice(num,num+this.state.pageSize)
+            })
+        }
+
+        pageNext (num) {
+            this.setPage(num)
+        }
+
+        render() {
+            return (
+                <div className="main">
+                    <div className="top_bar">
+                    </div>
+                    <div className="lists">
+                        <ul className="index">
+                            {this.state.indexList.map(function (cont) {
+                                return <List {...cont} />
+                            })}
+                        </ul>
+
+                        <PageButton { ...this.state } pageNext={this.pageNext} />
+
+                    </div>
+                </div>
+            );
+        }
+      }
+      //列表组件List
+      class List extends React.Component {
+          constructor(props) {
+              super(props);
+          }
+          render() {
+              const { idd,title,time,tag,contents } = this.props
+
+              return (
+                  <li id={idd}>
+                      <Link to={`/list/listmore/${idd}`} >
+                          <h3>{title}</h3>
+                          <div className="icon">
+                              <i className="fa fa-calendar"></i>
+                              <span>发表于 {time} </span>
+                              <i className="fa fa-sitemap"></i>
+                              <span>分类于 {tag}  </span>
+                              <i className="fa fa-edit"></i>
+                              <span>暂无评论</span>
+                          </div>
+                          <p>{contents}</p>
+                          <span className="more">more</span>
+                      </Link>
+                  </li>
+              );
+          }
+      }
+      //按钮组件PageButton
+      class PageButton extends React.Component {
+          constructor(props) {
+              super(props);
+              this.setNext=this.setNext.bind(this);
+              this.setUp=this.setUp.bind(this);
+              this.state={
+                  num: 0,
+                  pagenum:this.props.current
+              }
+          }
+          //下一页
+          setNext(){
+              if(this.state.pagenum < this.props.totalPage){
+                  this.setState({
+                      num:this.state.num + this.props.pageSize,
+                      pagenum:this.state.pagenum + 1
+                  },function () {
+                      console.log(this.state)
+                      this.props.pageNext(this.state.num)
+                  })
+              }
+          }
+          //上一页
+          setUp(){
+              if(this.state.pagenum > 1){
+                  this.setState({
+                      num:this.state.num - this.props.pageSize,
+                      pagenum:this.state.pagenum - 1
+                  },function () {
+                      console.log(this.state)
+                      this.props.pageNext(this.state.num)
+                  })
+              }
+          }
+          render() {
+              return (
+                  <div className="change_page">
+                      <span onClick={ this.setUp } >上一页</span>
+                      <span>{ this.state.pagenum }页/ { this.props.totalPage }页</span>
+                      <span onClick={ this.setNext }>下一页</span>
+                  </div>
+              );
+          }
+      }
+
+      ReactDOM.render(
+        <div>
+          <ListBox/> 
+        </div>,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>

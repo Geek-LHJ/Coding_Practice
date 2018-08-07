@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+    <style type="text/css" media="screen">
+      #example{padding: 50px; background-color: #fff;}
+    </style>    
+  </head>
+  <body>
+    <div id="example"></div>
+
+    <script type="text/babel">
+      var dist= document.getElementById('example');
+      //子组件显示数字
+      class Counter extends React.Component{
+        render(){
+          var textStyle={
+            fontSize:72,color:"#333",fontWeight:"bold"
+          };
+          return (
+            <div style={textStyle}>
+              {this.props.display}
+            </div>
+          );
+        }
+      }
+      //父组件框
+      class CounterParent extends React.Component{
+        constructor(props){
+          super(props);
+          this.state= {
+            count: 0
+          };
+          //一定要注意this的执行问题，必须加这句话
+          this.increase= this.increase.bind(this);
+        }
+        //增加count值，注意这个传入的变量 e 里面有许多知识；
+        increase(e){
+          var curCount= this.state.count;
+          if(e.shiftKey == true){
+            curCount= curCount + 100
+          }else{
+            curCount= curCount + 1             
+          }            
+          this.setState({
+            count:curCount
+          });
+        }
+        render(){
+          var backgroundStyle= {
+            padding:50,backgroundColor:"#ffc53A",width:250,height:100,
+            borderRadius:10,textAlign:"center"
+          };
+          var buttonStyle= {
+            fontSize:"1em",width:30,height:30,color:"#333",
+            fontWeight:"bold", lineWeight:"3px"
+          };
+          return(
+            <div style= {backgroundStyle}>
+              <Counter display= {this.state.count}/>
+              <button style= {buttonStyle} onClick= {this.increase}>+</button>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(
+        <CounterParent/>,
+        dist
+      );
+    </script>
+  </body>
+</html>

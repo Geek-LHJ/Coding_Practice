@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>From Data To UI</title>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+    <style type="text/css" media="screen">
+      #example{padding: 50px; background-color: #fff;}
+    </style>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+
+      var dist= document.getElementById('example');
+
+      class Circle extends React.Component{
+        render(){
+          var circlStyle={
+            padding:10,margin:20,display:"inline-block",
+            backgroundColor:this.props.bgColor,borderRadius:"50%",
+            width:100, height:100
+          };
+          return(
+            <div style={circlStyle}></div>
+          );
+        }
+      }
+
+      //var theCircle= <Circle bgColor="#f00"/>;
+
+      function showCircle(){
+        var colors=["red", "blue", "yellow", "gray","black","pink","#887552","#E94F37"];
+        var circleItem= [];
+        for(let i= 0; i< colors.length; i++){
+          var randNum= Math.floor(Math.random()* colors.length);
+          circleItem.push(<Circle bgColor= {colors[randNum]} key={i+ colors[randNum]}/>);
+        }
+        return circleItem;
+      }
+
+      ReactDOM.render(
+        <div>
+          {showCircle()}
+        </div>,
+        dist
+      );
+    </script>
+  </body>
+</html>

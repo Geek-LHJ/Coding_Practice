@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+
+  </head>
+  <body>
+    <div id="example"></div>
+
+    <script type="text/babel">
+    //显色板控件,颜色获取方式为this.props.color，指向Card父组件
+      var Square= React.createClass({
+        render: function(){
+          var squareStyle= {
+            height: 150,
+            backgroundColor: this.props.color
+          };
+          return (
+            <div style= {squareStyle}>
+            </div>
+          );
+        }
+      });
+    //文字显色控件,颜色获取方式为this.props.color，指向Card父组件
+      var Label= React.createClass({
+        render:function(){
+          var labelStyle= {
+            fonFamily: "sans-serif",
+            fontWerght:"bold",
+            padding: 13,
+            margin: 0
+          };
+          return (
+            <div style= {labelStyle}>
+              <p>{this.props.color}</p>
+            </div>
+          );
+        }
+      });
+    //父控件，,颜色获取方式为this.props.color，，指向Card组件实例化时，设置其color属性，用于构建该组件时调用对象
+      var Card= React.createClass({
+        render: function(){
+          //设置父控件的样式
+          var cardStyle= {
+            height: 200,
+            width:150,
+            backgroundColor: "#fff",
+            WebkitFilter: "drop-shadow(0px 0px 5px #666)",
+            filter: "drop-shadow(0px 0px 5px #666)"
+          }
+          return(
+            <div style= {cardStyle}>
+              <Square color={this.props.color}/>
+              <Label color={this.props.color}/>
+            </div>
+          );
+        }
+      });
+      //Card组件实例化时，设置其color属性，用于构建该组件时调用
+      ReactDOM.render(
+        <Card color= "blue"/>,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>

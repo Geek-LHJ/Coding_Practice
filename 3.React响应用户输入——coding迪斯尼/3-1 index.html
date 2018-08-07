@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+    <style type="text/css" media="screen">
+      #example{padding: 50px; background-color: #fff;}
+      .colorSquare{box-shadow: 0 0 25px 0 #333; width: 290px; height: 242px; margin-bottom: 15px;}
+      .colorArea input{padding: 10px; font-size: 16px; border:2px solid #ccc; }     
+      .colorArea button{padding: 10px; font-size: 16px;margin: 10px; background-color: #666;color: #fff; border: 2px solid #666;}
+      .colorArea button:hover{background-color: #111; border-color: #111;cursor: pointer;}
+    </style>    
+  </head>
+  <body>
+    <div id="example"></div>
+
+    <script type="text/babel">
+      var dist= document.getElementById('example');
+
+      class Colorizer extends React.Component{
+        //constructor构造器设置初始化的state状态值
+        constructor(props){
+          super(props);
+          this.state={
+            color:'',
+            bgColor:''
+          };
+          //一定要绑定组件的函数的this指向
+          this.colorValue= this.colorValue.bind(this);
+          this.setNewColor= this.setNewColor.bind(this);          
+        }
+        //获取文本框中输入的内容,注意 e 包含的内容(重要)
+        colorValue(e){
+          this.setState({
+            color:e.target.value
+          });
+        }
+        //用来响应用户点击按钮后的事件,注意 e 包含的内容(重要)
+        setNewColor(e){
+          this.setState({
+            bgColor:this.state.color
+          });
+          //清除文本框的内容和加入文本框输入焦点
+          this._input.value= "";
+          this._input.focus();
+          console.log(this._input);
+          e.preventDefault();
+        }
+
+        render(){
+          var squareStyle= {backgroundColor:this.state.bgColor};
+          var self= this;
+          return(
+            <div className= "colorArea">
+              <div style= {squareStyle} className= "colorSquare"></div>
+              <form onSubmit= {this.setNewColor}>
+                <input ref= {
+                  function(el){
+                    self._input= el;
+                  }
+                } 
+                onChange={this.colorValue} placeholder= "Please enter a color:"/>
+                <button type="submit">Show</button>
+              </form>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(
+        <Colorizer/>,
+        dist
+      );
+    </script>
+  </body>
+</html>

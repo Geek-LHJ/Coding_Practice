@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+
+    <script type="text/babel">
+      //最里层组件Display
+      var Display= React.createClass({
+        render: function(){
+          return (
+            <div>
+              <p>{this.props.color}</p>
+              <p>{this.props.num}</p>
+              <p>{this.props.size}</p>
+            </div>
+          );
+        }
+      });
+
+      //第二层组件Label
+      var Label= React.createClass({
+        render: function(){
+          return (
+            /*<Display color={this.props.color} num={this.props.num} size= {this.props.size}/>          */
+            <Display {...this.props} />
+          );
+        }
+      });
+
+      //最外层组件Shirt
+      var Shirt= React.createClass({
+        render: function(){
+          return (
+            /*<Label color={this.props.color} num={this.props.num} size= {this.props.size}/>          */
+            <Label {...this.props} />
+          );
+        }
+      });
+
+      //渲染到真正DOM节点
+      ReactDOM.render(
+        <Shirt color="blue" num="2" size="middle"/>,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>

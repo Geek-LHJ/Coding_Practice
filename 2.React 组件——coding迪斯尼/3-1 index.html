@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+    <style type= "text/css">
+      #example{padding:50px; background-color:#fff;}
+    </style>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+      //子组件Counter
+      class Counter extends React.Component{
+        //组件将接收新的props属性值
+        componentWillReceiveProps(newProps){
+          console.log("componentWillReceiveProps: component  Receive new Props");
+          return ;
+        }
+        //判断是否更新新的属性
+        shouldComponentUpdate(newProps, newState){
+          console.log("shouldComponentUpdate： should counter Update？");
+          return true;
+        }
+        //组件将要更新，然后触发render函数进行更新组件
+        componentWillUpdate(){
+          console.log("componentWillUpdate:  counter will  Update.");
+          return;
+        }
+        //组件完成更新
+        componentDidUpdate(){
+          console.log("componentDidUpdate:  counter did Update.");
+          return;
+        }
+        //组件进行渲染
+        render(){
+          var textStyle= {fontSize: 72,color:"#333", fontWeight:"bold"}
+          return (
+            <div style= {textStyle}>{this.props.display}</div>
+          );
+        }
+      }
+
+      //父组件CounterParent
+      class CounterParent extends React.Component{
+        /*getDefaultProps:function(){
+          console.log("getDefaultProps:receive props from outsize");
+          return {};//返回的为this.props 的JSON对象
+        }*/
+
+        //Use a static property to define defaultProps instead,instead getDefaultProps() 
+        static DefProps() {
+          console.log("getDefaultProps:receive props from outsize");
+          this.props= {};
+        }
+
+        /*getInitialState:function(){
+          console.log("getInitialState:set default state object");
+          return {};//返回this.state 的初始值
+        },*/
+        //构造器函数取代了getInitialState()方法
+        constructor(props){
+          console.log("getInitialState:set default state object");
+          super(props);
+          this.state = { count: 0 };
+          this.increase= this.increase.bind(this);
+        }
+        //组件将要初始化渲染，然后触发render函数进行渲染组件
+        componentWillMount(){
+          console.log("componentWillMount: component Will about to mount");        
+          return;
+        }
+        //组件完成初始化渲染
+        componentDidMount(){
+          console.log("componentDidMount: component is just mount");
+          return;
+        }
+        //state状态的count 数自增
+        increase(){
+          this.setState({
+            count: this.state.count+ 1
+          });
+        }
+        //组件接收新的state值后是否要进行更新操作
+        shouldComponentUpdate(newProps, newState){
+          console.log("shouldComponentUpdate： should Component Update ？");
+          if(newState.count < 5){
+             console.log(" Component should Update!");
+             return true;
+          }else{
+            console.log(" Component should not Update!");
+            ReactDOM.unmountComponentAtNode(document.getElementById('example'));
+            return false;
+          }          
+        }
+        //组件即将销毁时调用，通过React的API接口 ReactDOM.unmountComponentAtNode() 触发
+        componentWillUnmount(){
+          console.log("componentWillUnmount:  Component is about to removed from dom.");
+
+        }
+        //组件将要更新，然后触发render函数进行更新组件
+        componentWillUpdate(){
+          console.log("componentWillUpdate:  Component is about to Update.");
+          return;
+        }
+        //组件完成更新
+        componentDidUpdate(){
+          console.log("componentDidUpdate:  Component is just Update.");
+          return;
+        }
+        //组件渲染
+        render(){
+          var backgroundStyle= { padding: 50, border:"1px dotted #333",
+            width: 250, height: 100, borderRadius:10, textAlign:"center"
+          }
+          //var s= "CounterParent rendering ...";
+          return(
+            <div style= {backgroundStyle}>
+              <Counter display= {this.state.count}/>
+              <button onClick= {this.increase}>+</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(
+        <CounterParent />,
+        document.getElementById('example')
+      );
+    </script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="./lib/react.js"></script>
+    <script src="./lib/react-dom.js"></script>
+    <script src="./lib/browser.min.js"></script>
+    <style type="text/css" >      
+      #container{padding: 50px; background-color: #fff;}
+      .letterStyle{padding:10px;margin:10px;display:inline-block; background-color:#ffde00; color:#333; font-size:32px; text-align:center;}
+    </style>
+  </head>
+  <body>
+    <!-- 显示的真实DOM节点 -->
+    <div id="container"></div>
+
+    <script type="text/babel">
+    //通过React.createClass 创建一个名为Letter的组件对象，this.props.children方法调用其子元素
+      var  Letter= React.createClass({        
+        render: function(){
+        //React设计原则：界面设计逻辑和控件所要实现的业务逻辑放在同一个地方
+        var letter= {
+          padding: 10,
+          margin: 10,
+          backgroundColor: this.props.bg,
+          color: "#333",
+          display: "inline-block",
+          fontSize: 32,
+          textAlign: "center"
+        };
+          return (
+            /*<div className= "letterStyle">{this.props.children}</div>*/
+            <div style={letter}>{this.props.children}</div>
+
+          );
+        }
+      });
+      var dist= document.querySelector("#container");
+
+      ReactDOM.render(
+        <div>
+          <Letter bg="red">A</Letter>
+          <Letter bg="green">B</Letter>
+          <Letter bg="blue">C</Letter>
+          <Letter bg="yellow">D</Letter>
+          <Letter bg="gray">E</Letter>
+          <Letter bg="#cc0">F</Letter>
+        </div>,dist
+        );
+    </script>
+  </body>
+</html>
