@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script> -->
+    <style>
+        *{margin: 0; padding: 0;}
+        .box{width: 350px; min-height: 300px; border: 1px solid #ccc; margin: 30px auto;padding: 20px 40px;}
+        input{width: 300px; height: 30px; line-height: 30px; margin-top: 20px; text-indent: 1em;}
+        ul{padding-top: 20px;}
+        ul li{width: 300px;height: 30px;line-height: 30px; cursor: pointer;display: block; 
+        border: 1px solid #ddd; margin: 5px 0; text-indent: 1em; background-color: #eee}
+        .finished{ text-decoration: line-through;}
+    </style>
+    <script src="./lib/vue.js"></script>
+    <title>vue</title>
+</head>
+<body>
+    <div id="app" class="box">
+        <h1>{{ title }}</h1>
+
+        <!-- v-text 与 v-html 区别： -->
+        <!-- <h1 v-text= "title2"></h1> -->
+        <!-- <h1 v-html= "title2"></h1> -->
+
+        <!-- 输入内容 -->
+        <!-- v-model
+             v-on:keyup:enter-->
+        <input v-model= "newItem" v-on:keyup.enter= "addNew"/>
+
+        <!-- 展示列表 -->
+        <!-- v-for: 用来遍历数组中数据，
+             v-bind:class: 绑定样式，注意书写格式，下面以对象形式这种为直接调用样式，还有判断其是否能出现的功能
+             v-bind:class:"liCliss" 这种写法为获取data中的定义样式，data中 liClass:'finished' ，这样也可获取样式
+             v-on:click: -->
+        <ul>
+            <li v-for= "item in items" 
+            v-bind:class= "{finished: item.isFinished}"
+            v-on:click= "toggleFinish(item)" >
+                {{item.label}}
+            </li>
+        </ul>
+    </div>
+    <script>
+    //存储我们的数据到localStorage
+    const STORAGE_KEY= "todos-vuejs";
+    function fetch(){
+        return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]')
+    }
+    function save(items){
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+    }
+    //定义一个app的vue组件
+    var app = new Vue({
+        //获取DOM节点
+        el: '#app',
+        //存放一些属性数据
+        data: {
+            title: 'this is a to do list!',
+            //title2: '<strong>v-html与v-text区别：</strong>this is a to do list2!'
+            //模拟数据items
+            // items:[
+            //     {label: '例子：coding', isFinished: false},
+            //     {label: '：walking', isFinished: true},
+            //     {label: 'eatting', isFinished: true},
+            // ],
+            
+            //获取localStorage中的数据
+            items:fetch(),
+            //定义liClass获取的样式
+            liClass:'finished',
+            //newItem
+            newItem:''
+        },
+        //用于检测数据的变化并存储到  localStorage 当中
+        watch:{
+            items:{
+                handler:function(items){
+                    // console.log(val, oldVal);
+                    //往  localStorage 中存items数据
+                    save(items);
+                },
+                deep:true
+            }
+        },
+        //方法
+        methods: {
+            //切换任务是否完成的属性
+            toggleFinish(item){
+                // console.log(item);
+                item.isFinished= !item.isFinished;
+            },
+            //增加一条新的item
+            addNew(){
+                // console.log(this.newItem);
+                this.items.push(
+                    {label: this.newItem, isFinished: false},                    
+                );
+                this.newItem= '';
+            }
+        }  
+      });
+
+    </script>
+</body>
+</html>
