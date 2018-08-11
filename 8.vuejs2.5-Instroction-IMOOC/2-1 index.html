@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="./lib/vue.js"></script>
+    <title>vue</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 挂载点，模版 -->
+        <p>{{ message }}</p>
+        <hr>
+        <!-- 数据,事件和方法 -->
+        <div v-text= "content"></div>
+        <div v-html= "content"></div>
+        <hr>
+        <div v-on:click= "handleClick">点我看看:{{message}}</div>
+        <hr>
+        <!-- 属性绑定 -->
+        <div v-bind:title="title2">鼠标悬停在上面试试</div>
+        <hr>
+        <!-- 双向数据绑定 -->
+        <input v-model= "inputText" placeholder="Please input content">
+        <div>显示输入框内容：{{inputText}}</div>
+        <hr>
+        <!-- 计算属性 -->
+        姓：<input v-model= "firstName" >
+        名：<input v-model= "lastName" >
+        <div>{{fullName}}</div>
+        <hr>
+        <!-- 侦听器 :当检测firstName或者lastName变化(即fullName变化)时，数值加1-->
+        <div>{{count}}</div>
+        <hr>
+        <!-- v-if, v-show与v-for指令 -->
+        <div v-if= "show">v-if：HELLO lhj</div>
+        <div v-show= "show">v-show：HELLO lhj</div>
+        <!-- @click= "" 等价于 v-on:click= ""  -->
+        <button @click= "handleClickToggle">toggle</button>
+        <ul>
+            <li v-for= "(item, index) in list" :key= "index"> {{item}} </li>
+        </ul>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            // template:'<h1>{{ message }}</h1>',
+            data: {
+                message: 'Hello Vue!',
+                content:'<h2>hello</h2>',
+                title2:"这是title内容",
+                inputText:'',
+                firstName:'',
+                lastName:'',
+                count:0,
+                show:true,
+                list:[1,2,3,4,5]
+            },
+            //类似于React中的reselect库
+            computed:{
+                fullName(){
+                    return (this.firstName+ ' '+ this.lastName);
+                }
+            },
+            watch:{
+                fullName(){
+                    this.count++;
+                },
+            },
+            methods:{
+                // 数据,事件和方法
+                handleClick(){
+                    alert(" Click");
+                    this.message= 'content Changed'
+                },
+                // v-if, v-show与v-for指令
+                handleClickToggle(){
+                    this.show= !this.show;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

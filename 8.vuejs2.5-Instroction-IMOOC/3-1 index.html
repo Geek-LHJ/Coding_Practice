@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script> -->
+    <script src="./lib/vue.js"></script>
+    <title>vue</title>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <input v-model= "inputValue"/>
+            <button @click= "handleSubmit">提交</button>
+        </div>
+        <div>
+            <ul>
+                <!-- <li v-for= "(item,index) in list" :key= "index">
+                    {{item}}
+                </li> -->
+                <todo-item
+                v-for= "(item,index) in list" 
+                v-bind:key= "index" 
+                v-bind:content= "item"
+                v-bind:index= "index"
+                v-on:delete= "handelDelete">                    
+                </todo-item>
+            </ul>
+        </div>
+
+    </div>
+    
+    <script>
+        //对 ul 的 li 标签进行拆分，做成一个组件
+        //Vue.component定义的组件为全局组件，任何地方都可使用
+        Vue.component('todo-item', {
+            props:['content', 'index'],
+            template:'<li @click= "handleClick">{{content}}</li>',
+            methods:{
+                //实现子组件的删除数据功能，发布订阅模式
+                handleClick(){
+                    // alert('click');
+                    this.$emit('delete', this.index);
+                }
+            }
+        })
+
+        //定义局部组件，需要在 Vue 实例里面加入 components:{...}声明语句
+        // var ToDoItem= {
+        //     template:'<li>item</li>'
+        // }
+    
+        new Vue({
+            el: '#app',
+            // components:{ 'todo-item':ToDoItem},
+            data: {
+            //输入框内容
+            inputValue:'',
+            //数据列表内容
+            list:[]
+            },
+            methods:{
+                //点击提交按钮，进行数据保存于 list 数组数据中，并将 input 输入框清空
+                handleSubmit(){
+                    this.list.push(this.inputValue);
+                    this.inputValue= '';
+                },
+                //由子组件监听函数所触发，目的是删除该子组件在 list 数组中数据
+                handelDelete(index){
+                    alert("已经删除第"+(index+1)+ "个数据");
+                    this.list.splice(index, 1);
+                }
+            }
+        })
+    </script>
+</body>
+</html>
